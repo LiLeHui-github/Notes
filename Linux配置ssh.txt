@@ -1,0 +1,43 @@
+安装 SSH 服务
+Ubuntu/Debian 系统：
+sudo apt update
+sudo apt install openssh-server
+
+CentOS/RHEL 系统：
+sudo yum install openssh-server
+
+SSH 状态
+sudo systemctl start sshd
+sudo systemctl enable sshd
+
+配置 SSH 服务
+编辑配置文件：
+sudo nano /etc/ssh/sshd_config
+
+常见配置选项：
+修改默认端口（提高安全性）： Port 2222 
+禁用root用户登录： PermitRootLogin no
+启用密钥认证： PubkeyAuthentication yes 
+禁用密码登录： PasswordAuthentication no
+
+保存后重启服务以应用更改：
+sudo systemctl restart sshd
+
+生成和使用 SSH 密钥
+在客户端生成密钥对：
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/my_key
+
+将公钥复制到服务器：
+ssh-copy-id -i ~/.ssh/my_key.pub user@server_ip
+
+防火墙配置
+确保防火墙允许 SSH 端口（默认 22 或自定义端口）：
+sudo ufw allow 2222/tcp # 替换为自定义端口号
+sudo ufw enable # 启用防火墙（如未启用）
+
+验证和测试
+检查 SSH 服务状态：
+sudo systemctl status sshd
+
+使用 SSH 登录测试：
+ssh -i ~/.ssh/my_key user@server_ip -p 2222 # 替换为自定义端口号

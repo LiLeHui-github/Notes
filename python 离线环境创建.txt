@@ -1,0 +1,9 @@
+国内源： https://pypi.tuna.tsinghua.edu.cn/simple/
+
+python -m pip freeze --all > packages.txt
+
+下载安装包
+python -m pip download -d . -r packages.txt
+
+离线环境下安装包
+python -m pip install -f [package_dir] -r packages.txt --no-index

@@ -1,0 +1,1 @@
+1. 如果QTranslator在栈上创建，当QTranslator释放时会从QApplication上移除， 推荐new一个QTranslator

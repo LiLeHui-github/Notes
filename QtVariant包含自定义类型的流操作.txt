@@ -1,0 +1,2 @@
+首先调用 qRegisterMetaTyoeStreamOperators<>()
+注册类型的流操作

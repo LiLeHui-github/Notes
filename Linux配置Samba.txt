@@ -1,0 +1,48 @@
+安装和启动Samba服务
+
+更新软件包并安装Samba：
+sudo apt update
+sudo apt install samba
+
+查看Samba服务是否正在运行：
+sudo systemctl status smbd
+sudo systemctl status nmbd
+
+启动Samba服务：
+sudo systemctl start smbd nmbd
+
+设置Samba服务开机启动：
+sudo systemctl enable smbd nmbd
+
+创建共享目录：
+mkdir /home/user0/share
+sudo chown user0:user0 /home/user0/share
+sudo chmod 0775 /home/user0/share
+
+编辑配置文件：
+sudo vim /etc/samba/smb.conf
+
+添加共享目录配置：
+[share]
+comment = File share
+path = /home/user0/share
+available = yes
+browseable = yes
+valid users = user0
+read only = no
+writable = yes
+
+检查配置文件语法是否正确：
+sudo testparm /etc/samba/smb.conf
+
+重启Samba服务以应用配置更改：
+sudo systemctl restart smbd nmbd
+
+设置防火墙允许Samba连接：
+sudo ufw allow samba
+
+添加Samba用户：
+sudo pdbedit -a -u user0
+
+删除Samba用户
+sudo pdbedit -a -x user0

@@ -1,0 +1,6 @@
+
+启动挂载
+sudo mount -t cifs -o username=cole,password=123456,dir_mode=0777,file_mode=0777 //192.168.226.1/Source /home/cole/Desktop/Window_Shared/ 
+
+删除挂载
+sudo umount  /home/cole/Desktop/Window_Shared/ 

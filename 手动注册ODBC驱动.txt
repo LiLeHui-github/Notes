@@ -1,0 +1,9 @@
+打开注册表
+注册64位ODBC驱动
+    ODBC配置路径：HKEY_LOCAL_MACHINE\SOFTWARE\ODBC\ODBCINST.INI
+注册32位ODBC驱动
+    ODBC配置路径：HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\ODBC\ODBCINST.INI
+在"ODBC配置路径\ODBC Drivers\"下创建 字符串值 "DM8_32 ODBC DRIVER", 数据 "Installed"
+在"ODBC配置路径"下创建 项 名称为 之前设置的名称"DM8_32 ODBC DRIVER"
+创建 字符串值 "Driver", 数据 驱动程序路径"D:/xxx/xxx.dll" （必须为绝对路径）
+创建 字符串值 "Setup", 数据 驱动程序路径"D:/xxx/xxx.dll"  （必须为绝对路径）
