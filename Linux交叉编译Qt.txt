@@ -1,0 +1,39 @@
+1. 复制目标平台的usr文件夹， 到主机
+
+2. 配置qt源码的mkspecs, 复制一份linux-aarch64-gnu-g++, 命名为linux-rk3588-gnu-g++
+
+3. 修改linux-rk3588-gnu-g++的qmake.conf， 添加以下内容
+
+        QMAKE_CXX = aarch64-linux-gnu-g++-9
+        QMAKE_CC = aarch64-linux-gnu-gcc-9
+        QMAKE_LINK = aarch64-linux-gnu-g++-9
+        QMAKE_LINK_SHLIB = aarch64-linux-gnu-g++-9
+        
+        # 设置 sysroot
+        QMAKE_SYSROOT           = /home/llh/rk3588/sysroot/
+        QMAKE_CFLAGS           += --sysroot=$$QMAKE_SYSROOT
+        QMAKE_CXXFLAGS         += --sysroot=$$QMAKE_SYSROOT
+        QMAKE_LFLAGS           += --sysroot=$$QMAKE_SYSROOT
+        
+        # 设置 pkg-config 路径
+        PKG_CONFIG              = aarch64-linux-gnu-pkg-config
+        
+4. 执行构建指令
+../configure \
+    -release \
+    -opensource \
+    -confirm-license \
+    -xplatform linux-aarch64-gnu-g++ \
+    -device-option CROSS_COMPILE=aarch64-linux-gnu- \
+    -sysroot /home/llh/rk3588/sysroot \
+    -prefix /home/llh/rk3588/opt/qt5.15.2-rk3588 \
+    -nomake tests \
+    -nomake examples \
+    -nomake tools
+
+5. 执行编译指令
+    gmake -j4
+
+5. 如果报错， 
+    修改qtbase/src/corelib/text/qbytearraymatcher.h 添加limits头文件
+    修改qtbase/src/corelib/tools/qoffsetstringarray_p.h  添加limits头文件
