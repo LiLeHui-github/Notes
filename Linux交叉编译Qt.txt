@@ -27,13 +27,11 @@
     -device-option CROSS_COMPILE=aarch64-linux-gnu- \
     -sysroot /home/llh/rk3588/sysroot \
     -prefix /home/llh/rk3588/opt/qt5.15.2-rk3588 \
-    -nomake tests \
-    -nomake examples \
-    -nomake tools
-
-5. 执行编译指令
+    -nomake tests
+    
+6. 执行编译指令
     gmake -j4
 
-5. 如果报错， 
+7. 如果报错， 
     修改qtbase/src/corelib/text/qbytearraymatcher.h 添加limits头文件
     修改qtbase/src/corelib/tools/qoffsetstringarray_p.h  添加limits头文件
