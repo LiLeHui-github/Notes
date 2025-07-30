@@ -3,7 +3,7 @@
 python -m pip freeze --all > packages.txt
 
 下载安装包
-python -m pip download -d . -r packages.txt
+python -m pip download -d . -r packages.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
 
 离线环境下安装包
 python -m pip install -f [package_dir] -r packages.txt --no-index
