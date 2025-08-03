@@ -1,0 +1,11 @@
+1. 拉取代码
+git clone https://github.com/protocolbuffers/protobuf.git
+cd protobuf
+git submodule update --init --recursive
+2. cmake构建
+        进入protobuf/cmake路径
+        mkdir build
+        cd build
+        cmake  ..  -G "MinGW Makefiles" -DCMAKE_C_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/gcc.exe" -DCMAKE_CXX_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/g++.exe" 
+
+        cmake --build . --config Release -j 4 --target install
