@@ -25,10 +25,17 @@ Windows平台
 
         cmake .. -G "MinGW Makefiles" -DNCNN_VULKAN=ON -DNCNN_AVX512=OFF -DNCNN_AVX2=ON -DCMAKE_C_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/gcc.exe" -DCMAKE_CXX_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/g++.exe" -DOpenCV_DIR="F:/work/project/Cpp/OpenCV/ncnn/3rdparty/opencv/build/install" -Dprotobuf_DIR="F:/work/project/Cpp/OpenCV/ncnn/3rdparty/protobuf/cmake/build/lib/cmake/protobuf" -DCMAKE_CXX_FLAGS="-D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -mno-avx512f -mno-avx512dq -mno-avx512cd -mno-avx512bw -mno-avx512vl"
 
-Linux平台
-        mkdir -p build-aarch64-linux-gnu
-        cd build-aarch64-linux-gnu
-        cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/aarch64-linux-gnu.toolchain.cmake ..
-        make -j 2
+        cmake --build . --config Release -j 4 --target install
 
-cmake --build . --config Release -j 4 --target install
+Linux平台
+        cmake .. 
+                -DCMAKE_BUILD_TYPE=Release
+                -DNCNN_BUILD_TOOLS=ON
+                -DCMAKE_SYSTEM_NAME=Linux
+                -DCMAKE_SYSTEM_PROCESSOR=aarch64
+                -DCMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc
+                -DCMAKE_CXX_COMPILER=/usr/bin/aarch64-linux-gnu-g++
+                -DCMAKE_INSTALL_PREFIX=/home/kylin/work/ncnn_all_source/ncnn/build/install/ncnn
+
+        cmake .. -DNCNN_BUILD_TOOLS=ON -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DCMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=/usr/bin/aarch64-linux-gnu-g++ -DCMAKE_INSTALL_PREFIX=/home/kylin/work/ncnn_all_source/ncnn/build/install/ncnn
+
