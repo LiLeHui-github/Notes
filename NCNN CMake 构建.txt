@@ -3,13 +3,24 @@
     cd ncnn
     git submodule update --init
 
-2. 使用MinGW构建， 指定编译器
+2. protobuf, opencv 
+
+3. 使用MinGW构建， 指定编译器
 mkdir build
 cd build
-cmake  ..  -G "MinGW Makefiles"
-	-DNCNN_VULKAN=ON
-  	-DCMAKE_C_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/gcc.exe" 
-	-DCMAKE_CXX_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/g++.exe" 
-cmake  ..  -G "MinGW Makefiles" -DNCNN_VULKAN=ON -DCMAKE_C_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/gcc.exe" -DCMAKE_CXX_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/g++.exe" 
+
+需要升级mingw版本， 不然就禁用avx512f
+
+cmake .. -G "MinGW Makefiles"
+        -DNCNN_VULKAN=ON
+        -DNCNN_AVX512=OFF
+        -DNCNN_AVX2=ON
+        -DCMAKE_C_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/gcc.exe"
+        -DCMAKE_CXX_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/g++.exe"
+        -DOpenCV_DIR="F:/work/project/Cpp/OpenCV/ncnn/3rdparty/opencv/build/install"
+        -Dprotobuf_DIR="F:/work/project/Cpp/OpenCV/ncnn/3rdparty/protobuf/cmake/build/lib/cmake/protobuf"
+        -DCMAKE_CXX_FLAGS="-D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -mno-avx512f -mno-avx512dq -mno-avx512cd -mno-avx512bw -mno-avx512vl"
+
+cmake .. -G "MinGW Makefiles" -DNCNN_VULKAN=ON -DNCNN_AVX512=OFF -DNCNN_AVX2=ON -DCMAKE_C_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/gcc.exe" -DCMAKE_CXX_COMPILER="D:/Software/Qt/Qt5.12.11/Tools/mingw730_64/bin/g++.exe" -DOpenCV_DIR="F:/work/project/Cpp/OpenCV/ncnn/3rdparty/opencv/build/install" -Dprotobuf_DIR="F:/work/project/Cpp/OpenCV/ncnn/3rdparty/protobuf/cmake/build/lib/cmake/protobuf" -DCMAKE_CXX_FLAGS="-D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -mno-avx512f -mno-avx512dq -mno-avx512cd -mno-avx512bw -mno-avx512vl"
 
 cmake --build . --config Release -j 4 --target install
