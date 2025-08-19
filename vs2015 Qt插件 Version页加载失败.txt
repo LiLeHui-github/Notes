@@ -1,0 +1,2 @@
+注册表 计算机\HKEY_CURRENT_USER\SOFTWARE\Digia 
+删除 Version

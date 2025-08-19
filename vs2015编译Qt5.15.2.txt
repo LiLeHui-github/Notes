@@ -1,0 +1,16 @@
+1. 查看Qt源码里的README文档查看编译条件
+        * Supported compiler (Visual Studio 2012 or later,
+           MinGW-builds gcc 4.9 or later)
+        * Perl version 5.12 or later   [http://www.activestate.com/activeperl/]
+        * Python version 2.7 or later  [http://www.activestate.com/activepython/]
+        * Ruby version 1.9.3 or later  [http://rubyinstaller.org/]
+
+2. 启动vs2015 x64 控制台跳转到源码路径
+        
+2. 创建构建路径， 分离构建保持源码路径纯净
+        mkdir msvc2015_64_build
+        cd  msvc2015_64_build
+        D:\Software\Qt\Qt5.15.2\Src\configure.bat -prefix D:\Software\Qt\Qt5.15.2\msvc2015_64 -opensource -confirm-license -debug-and-release -platform win32-msvc2015 -skip qtwebengine -nomake tests -mp -recheck-all 
+        set CL=/MP
+        nmake
+        nmake install
