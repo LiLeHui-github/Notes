@@ -1,66 +1,112 @@
-1. 创建Python虚拟环境
-    D:\Software\Python\Python3.11.4\python.exe -m venv venv
+创建Python虚拟环境
+        python.exe -m venv .venv
 
-2. 激活虚拟环境
-    .\venv\Scripts\Activate.ps1
+激活虚拟环境
+        .\.venv\Scripts\Activate.ps1
 
-3. 安装yolo库
-    python -m pip install ultralytics -i https://pypi.tuna.tsinghua.edu.cn/simple/
+安装库
+        安装匹配CUDA版本的Pytorch
+        # CUDA 12.9
+        python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu129
+        python -m pip install ultralytics pnnx ncnn
 
-4. 配置yolo模型
-    将ultralytics\ultralytics\cfg\models\11\yolo11.yaml 复制到项目下
-    并修改内容，将 nc: 80 # number of classes， 改为自己模型的类别数
-
-    如将 nc: 80 # number of classes
-    改为 nc: 5 # number of classes
-    
-   5个类别分别位 {刀、 匕首， 枪， 液体容器， 灭火器}
-
-5. 配置数据集
-    使用标注程序标注数据
-    使用dataset.py, 将原本数据集按照8：1：1的比例划分位训练集，验证集，测试集
-    在目录下创建data.yaml, 并输入以下内容
+配置数据集
+        使用标注程序标注数据
+        使用dataset.py, 将原本数据集按照8：1：1的比例划分位训练集，验证集，测试集
+        在目录下创建data.yaml, 并输入以下内容
         path: datasets  # 数据集所在路径
         train: train.txt  # 数据集路径下的train.txt
         val: val.txt  # 数据集路径下的val.txt
         test: test.txt  # 数据集路径下的test.txt
 
-    # 类别
-    names:
+        # 类别
+        names:
         0: Knife
         1: Dagger
         1: Gun
         2: LiquidContainer
         3: FireExtinguisher
 
-6. 模型训练
+模型训练
+        执行训练脚本
+        python train.py
 
-7. 导出为TorchScript
-    yolo export model=best.pt format=torchscript 
+模型验证
+        python val.py
 
-8. 执行
-    pnnx best.torchscript
+模型推理
+        python predict.py
 
-9. 修改best_pnnx_.py
-//      before:
-//          v_165 = v_142.view(1, 144, 6400)
-//          v_166 = v_153.view(1, 144, 1600)
-//          v_167 = v_164.view(1, 144, 400)
-//          v_168 = torch.cat((v_165, v_166, v_167), dim=2)
-//          ...
-//      after:
-//          v_165 = v_142.view(1, 144, -1).transpose(1, 2)
-//          v_166 = v_153.view(1, 144, -1).transpose(1, 2)
-//          v_167 = v_164.view(1, 144, -1).transpose(1, 2)
-//          v_168 = torch.cat((v_165, v_166, v_167), dim=1)
-//          return v_168
+导出为 TorchScript
+        yolo export model=best.pt format=torchscript
 
-10 执行, 重新导出 TorchScript
-    python -c 'import best_pnnx; best_pnnx.export_torchscript()'
+创建导出目录
+        mkdir export
+        mv best.torchscript ./export
+        cd export
 
-11 执行
-    pnnx best_pnnx.py.pt inputshape=[1,3,640,640] inputshape2=[1,3,320,320]
+执行
+        pnnx best.torchscript
 
-12. 复制  
-    mv yolov8n_pnnx.py.ncnn.param yolov8n.ncnn.param
-    mv yolov8n_pnnx.py.ncnn.bin yolov8n.ncnn.bin
+查看ncnn 的 examples 查看对应yolo版本的使用方式
+    以下为ncnn/examples/yolo11.cpp 部分内容
+    // 1. install
+    //      pip3 install -U ultralytics pnnx ncnn
+    // 2. export yolo11 torchscript
+    //      yolo export model=yolo11n.pt format=torchscript
+    // 3. convert torchscript with static shape
+    //      pnnx yolo11n.torchscript
+    // 4. modify yolo11n_pnnx.py for dynamic shape inference
+    //      A. modify reshape to support dynamic image sizes
+    //      B. permute tensor before concat and adjust concat axis
+    //      C. drop post-process part
+    //      before:
+    //          v_235 = v_204.view(1, 144, 6400)
+    //          v_236 = v_219.view(1, 144, 1600)
+    //          v_237 = v_234.view(1, 144, 400)
+    //          v_238 = torch.cat((v_235, v_236, v_237), dim=2)
+    //          ...
+    //      after:
+    //          v_235 = v_204.view(1, 144, -1).transpose(1, 2)
+    //          v_236 = v_219.view(1, 144, -1).transpose(1, 2)
+    //          v_237 = v_234.view(1, 144, -1).transpose(1, 2)
+    //          v_238 = torch.cat((v_235, v_236, v_237), dim=1)
+    //          return v_238
+    //      D. modify area attention for dynamic shape inference
+    //      before:
+    //          v_95 = self.model_10_m_0_attn_qkv_conv(v_94)
+    //          v_96 = v_95.view(1, 2, 128, 400)
+    //          v_97, v_98, v_99 = torch.split(tensor=v_96, dim=2, split_size_or_sections=(32,32,64))
+    //          v_100 = torch.transpose(input=v_97, dim0=-2, dim1=-1)
+    //          v_101 = torch.matmul(input=v_100, other=v_98)
+    //          v_102 = (v_101 * 0.176777)
+    //          v_103 = F.softmax(input=v_102, dim=-1)
+    //          v_104 = torch.transpose(input=v_103, dim0=-2, dim1=-1)
+    //          v_105 = torch.matmul(input=v_99, other=v_104)
+    //          v_106 = v_105.view(1, 128, 20, 20)
+    //          v_107 = v_99.reshape(1, 128, 20, 20)
+    //          v_108 = self.model_10_m_0_attn_pe_conv(v_107)
+    //          v_109 = (v_106 + v_108)
+    //          v_110 = self.model_10_m_0_attn_proj_conv(v_109)
+    //      after:
+    //          v_95 = self.model_10_m_0_attn_qkv_conv(v_94)
+    //          v_96 = v_95.view(1, 2, 128, -1)
+    //          v_97, v_98, v_99 = torch.split(tensor=v_96, dim=2, split_size_or_sections=(32,32,64))
+    //          v_100 = torch.transpose(input=v_97, dim0=-2, dim1=-1)
+    //          v_101 = torch.matmul(input=v_100, other=v_98)
+    //          v_102 = (v_101 * 0.176777)
+    //          v_103 = F.softmax(input=v_102, dim=-1)
+    //          v_104 = torch.transpose(input=v_103, dim0=-2, dim1=-1)
+    //          v_105 = torch.matmul(input=v_99, other=v_104)
+    //          v_106 = v_105.view(1, 128, v_95.size(2), v_95.size(3))
+    //          v_107 = v_99.reshape(1, 128, v_95.size(2), v_95.size(3))
+    //          v_108 = self.model_10_m_0_attn_pe_conv(v_107)
+    //          v_109 = (v_106 + v_108)
+    //          v_110 = self.model_10_m_0_attn_proj_conv(v_109)
+    // 5. re-export yolo11 torchscript
+    //      python3 -c 'import yolo11n_pnnx; yolo11n_pnnx.export_torchscript()'
+    // 6. convert new torchscript with dynamic shape
+    //      pnnx yolo11n_pnnx.py.pt inputshape=[1,3,640,640] inputshape2=[1,3,320,320]
+    // 7. now you get ncnn model files
+    //      mv yolo11n_pnnx.py.ncnn.param yolo11n.ncnn.param
+    //      mv yolo11n_pnnx.py.ncnn.bin yolo11n.ncnn.bin

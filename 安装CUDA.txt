@@ -1,0 +1,29 @@
+1. 查看GPU驱动版本和CUDA版本
+        输入命令 nvidia-smi
+        CUDA Version: 13.0   
+
+2. 查看PyTorch版本
+        python -c "import torch;  print(torch.__version__)"
+
+    查看PyTorch是否支持CUDA
+        python -c "import torch;  print(torch.cuda.is_available());"
+
+3. 卸载不支持CUDA的PyTorch
+        python -m pip uninstall torch torchvision torchaudio
+
+4. 安装匹配CUDA版本的Pytorch
+        # CUDA 12.8
+        python -m  pip install torch==2.7.1 torchvision==0.22.1 torchaudio==2.7.1 --index-url https://download.pytorch.org/whl/cu128
+        # CUDA 11.8
+        python -m  pip install torch==2.7.1 torchvision==0.22.1 torchaudio==2.7.1 --index-url https://download.pytorch.org/whl/cu118
+
+5. 查看是否支持CUDA, 测试CUDA
+        python -c "import torch;  print(torch.cuda.is_available());"
+        python -c "import torch;  x = torch.randn(1000, 1000).cuda(); y = torch.cat([x, x], dim=1);print(y.shape)"
+
+        # 检查cudnn是否可用
+        python -c "import torch;  cudnn_available = torch.backends.cudnn.is_available(); print(cudnn_available)"
+        
+        # 获取cudnn版本
+        python -c "import torch;  cudnn_version = torch.backends.cudnn.version(); print(cudnn_version)"
+        
