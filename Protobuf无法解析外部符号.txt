@@ -1,0 +1,2 @@
+添加预处理宏
+PROTOBUF_USE_DLLS
