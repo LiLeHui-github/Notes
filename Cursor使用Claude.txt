@@ -1,0 +1,7 @@
+首先，设置好你的梯子（节点不要选择香港），开启tun和系统代理
+
+然后，command+shift+p快捷键，打开搜索，输入【open user setting】
+
+添加代理 http://127.0.0.1:10809
+
+重启Cursor
