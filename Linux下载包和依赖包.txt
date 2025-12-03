@@ -1,41 +1,14 @@
 sudo apt-get update
-sudo apt-get install apt-rdepends
 
 下载后缓存路径
 /var/cache/apt/archives
 
-示例
-包名：libtinfo5
-
-    查询依赖
-    sudo apt-rdepends libtinfo5
-
-    依赖列表
-    Reading package lists... Done
-    Building dependency tree       
-    Reading state information... Done
-    libtinfo5
-      Depends: libc6 (>= 2.16)
-    libc6
-      Depends: libcrypt1 (>= 1:4.4.10-10kylin4)
-      Depends: libgcc-s1
-    libcrypt1
-      Depends: libc6 (>= 2.25)
-    libgcc-s1
-      Depends: gcc-10-base (= 10.3.0-1kylin1~20.04)
-      Depends: libc6 (>= 2.14)
-    gcc-10-base
-
-    查询是否已经安装
-    dpkg -l | grep gcc-10
-    dpkg -l | grep libc6
-
-    下载包
-    apt-get download <package_name>
+清理缓存
+sudo apt cleanG
 
 说明
     查找包的所有依赖
-    apt-rdepends <package_name>
+     apt-cache depends <package_name>
 
     查找包的具体版本
     apt-cache policy <package_name>
@@ -47,9 +20,24 @@ sudo apt-get install apt-rdepends
     apt-get download <package_name>
 
     下载依赖包
-    apt download $(apt-rdepends <package_name> | grep -v "^ ")
-    或
-    apt-rdepends <package_name> | grep -v "^ " | xargs apt-get download
+    #!/bin/bash
+    # 获取所有直接和间接依赖
+    apt-cache depends --recurse --no-recommends --no-suggests <package_name> | \
+    grep "^[a-zA-Z]" | sort -u | \
+    while read pkg; do
+        # 检查是否已安装（用明确命令）
+        if dpkg -l | grep -q "^ii  $pkg "; then
+            echo "跳过已安装: $pkg"
+        else
+            echo "正在下载: $pkg"
+            apt-get download "$pkg"
+        fi
+    done
 
     安装包
     sudo dpkg -i *.deb
+    sudo apt install ./<package_name>
+
+或者在干净系统调用安装然后复制缓存
+    sudo apt clean
+    然后去  /var/cache/apt/archives 复制所有包

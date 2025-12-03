@@ -1,0 +1,9 @@
+1. 在纯净联网系统上安装，复制包到离线机子上安装
+在干净系统调用安装然后复制缓存
+安装完成后，apt会清理缓存，速度要快
+然后去  /var/cache/apt/archives 复制所有包
+
+    sudo apt clean
+    sudo apt install qt5-default
+    sudo apt install qtcreator
+    sudo apt install qtmultimedia5-dev
