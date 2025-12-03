@@ -1,0 +1,10 @@
+1. 使用CMake配置FastDDS库依赖
+2. 创建消息数据结构HelloMsg.idl
+    struct HelloMsg
+    {
+        unsigned long index;
+        string message;
+    };
+3. 生成代码
+   fastddsgen.bat -language c++ -ppDisable HelloMsg.idl
+3. 编写发布订阅接口

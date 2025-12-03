@@ -1,6 +1,9 @@
 sudo apt-get update
 sudo apt-get install apt-rdepends
 
+下载后缓存路径
+/var/cache/apt/archives
+
 示例
 包名：libtinfo5
 
@@ -42,6 +45,11 @@ sudo apt-get install apt-rdepends
 
     下载包
     apt-get download <package_name>
+
+    下载依赖包
+    apt download $(apt-rdepends <package_name> | grep -v "^ ")
+    或
+    apt-rdepends <package_name> | grep -v "^ " | xargs apt-get download
 
     安装包
     sudo dpkg -i *.deb

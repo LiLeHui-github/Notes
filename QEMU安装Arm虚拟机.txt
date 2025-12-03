@@ -1,0 +1,11 @@
+1. 下载QEMU
+    https://qemu.weilnetz.de/w64/
+2. 下载ARM架构的BIOS固件 QEMU_EFI.fd
+    https://releases.linaro.org/components/kernel/uefi-linaro/16.02/release/qemu64/
+3. 下载操作系统镜像飞腾版
+    https://distro-images.kylinos.cn:8802/web_pungi/download/share/M8UbGlg2WyeHnANzv0srJOEjC9R7ZXDx/
+4. 创建镜像
+    来到qemu路径下，打开控制台
+    qemu-img.exe create -f raw D:/VirtualMachines/Systems/Kylin10SP1-General-2303-ARM64/kylin_arm64.img 80G
+5. 安装麒麟系统
+    qemu-system-aarch64.exe -m 8192 -cpu cortex-a76 -smp 8,sockets=4,cores=2 -M virt -bios D:/VirtualMachines/ISO/ARM/QEMU_EFI.fd -device VGA -device nec-usb-xhci -device usb-mouse -device usb-kbd -drive if=none,file=D:/VirtualMachines/Systems/Kylin10SP1-General-2303-ARM64/kylin_arm64.img,id=hd0 -device virtio-blk-device,drive=hd0 -drive if=none,file=D:/VirtualMachines/ISO/ARM/Kylin-Desktop-V10-SP1-General-Release-2303-ARM64.iso,id=cdrom,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom
