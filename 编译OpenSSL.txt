@@ -1,0 +1,25 @@
+Windows下需要准备编译工具
+    Microsoft Visual C compiler
+    Perl
+    NASM
+
+1. Install Perl
+2. Install NASM
+3. 将Perl和NASM添加到PATH环境变量
+4. 使用管理员权限启动控制台, 运行`vcvarsall.bat x64 -vcvars_ver="14.29.16.11"` 脚本使用msvc 14.2构建工具
+5. 控制台切换到OpenSSL源码路径下输入
+    - `perl Configure VC-WIN32`     if you want 32-bit OpenSSL or
+    - `perl Configure VC-WIN64A`    if you want 64-bit OpenSSL or
+    - `perl Configure VC-WIN64-ARM` if you want Windows on Arm (win-arm64)
+       OpenSSL or
+    - `perl Configure`              自动确认平台
+6. `nmake`
+7. `nmake test`
+8. `nmake install`
+9. 配置`OPENSSL_ROOT_DIR`环境变量
+
+
+
+问题1 build_wincrypt_test.c X509_NAME 与WinCrypt冲突
+当前解决方法 注释掉warning指令
+    
