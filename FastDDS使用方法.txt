@@ -7,4 +7,10 @@
     };
 3. 生成代码
    fastddsgen.bat -language c++ -ppDisable HelloMsg.idl
-3. 编写发布订阅接口
+
+使用动态库
+    set(fastdds_SHARED_LIBS ON)
+    set(fastcdr_SHARED_LIBS ON)
+
+    配置宏
+    EPROSIMA_ALL_DYN_LINK
