@@ -1,0 +1,26 @@
+1. INNER JOIN（内连接）
+只返回两个表中都匹配的记录。
+如果某行在任一表中没有匹配，则不会出现在结果中。
+
+只会返回有订单的用户。
+SELECT users.name, orders.amount
+FROM users
+INNER JOIN orders ON users.id = orders.user_id;
+
+2. LEFT JOIN（左连接）
+返回左表（FROM 后的表）的所有记录，即使右表中没有匹配。
+如果右表中没有匹配，结果中右表字段为 NULL。
+
+返回所有用户，包括没有订单的用户（此时 amount 为 NULL）。
+SELECT users.name, orders.amount
+FROM users
+LEFT JOIN orders ON users.id = orders.user_id;
+
+3. RIGHT JOIN（右连接）
+返回右表（JOIN 后的表）的所有记录，即使左表中没有匹配。
+如果左表中没有匹配，结果中左表字段为 NULL。
+
+返回所有订单，包括没有对应用户的订单（此时 name 为 NULL）。
+SELECT users.name, orders.amount
+FROM users
+RIGHT JOIN orders ON users.id = orders.user_id;

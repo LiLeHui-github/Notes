@@ -13,10 +13,13 @@ Windows下需要准备编译工具
     - `perl Configure VC-WIN64-ARM` if you want Windows on Arm (win-arm64)
        OpenSSL or
     - `perl Configure`              自动确认平台
+    
+    perl path/Configure VC-WIN64A   可以在其他路径构建,仿真污染源码路径
+
 6. `nmake`
 7. `nmake test`
 8. `nmake install`
-9. 配置`OPENSSL_ROOT_DIR`环境变量
+9. 配置`OPENSSL_ROOT_DIR`环境变量,用于CMake搜索到OpenSSL
 
 
 
