@@ -1,0 +1,40 @@
+1.  编译OpenSSL
+    安装Perl和NASM
+    将perl和NASM的路径配置环境变量
+    打开vs2019的命令提示符
+    导航到构建路径
+        cd D:\soft_library\FastDDS-SRC\build\openssl
+    开始构建
+        perl D:/soft_library/FastDDS-SRC/openssl-3.1.4/Configure VC-WIN64A 
+    开始编译
+        nmake
+        nmake install
+        
+2.  编译Memory
+        会有依赖， 修改test的CMakeLists.txt,将URL改为本地路径 file://D:/soft_library/FastDDS-SRC/v2.4.12.zip
+        chcp 65001
+        cd D:\soft_library\FastDDS-SRC\build\memory
+        cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_INSTALL_PREFIX=D:/project/lh_workspace/3rdparty/fastdds D:/soft_library/FastDDS-SRC/memory
+        cmake --build . --config Debug --target install  
+        cmake --build . --config Release --target install  
+        
+3.  编译Fast-CDR
+        cd D:\soft_library\FastDDS-SRC\build\fastCDR
+        cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_INSTALL_PREFIX=D:/project/lh_workspace/3rdparty/fastdds D:/soft_library/FastDDS-SRC/Fast-CDR
+        cmake --build . --config Debug --target install  
+        cmake --build . --config Release --target install  
+
+4.  编译Fast-DDS
+        在项目CMakeLists.txt中添加/utf-8
+            if(MSVC OR MSVC_IDE)
+                add_compile_options(/utf-8)
+            endif()
+        cd D:\soft_library\FastDDS-SRC\build\fastDDS
+        cmake -G "Visual Studio 16 2019" -A x64 -DOPENSSL_INCLUDE_DIR="C:/Program Files/OpenSSL/include" -DTHIRDPARTY_UPDATE=OFF -DTHIRDPARTY_Asio=ON -DTHIRDPARTY_TinyXML2=ON -DTINYXML2_FROM_SOURCE=ON -DCMAKE_INSTALL_PREFIX=D:/project/lh_workspace/3rdparty/fastdds -DCMAKE_PREFIX_PATH=D:/project/lh_workspace/3rdparty/fastdds D:/soft_library/FastDDS-SRC/Fast-DDS
+        cmake --build . --config Debug --target install  
+        cmake --build . --config Release --target install  
+
+5. 编译Fast-DDS-Gen   
+        gradlew.bat build
+        gradlew.bat install --install_path=D:/Work/Projects/3rdparty/fastdds
+        
