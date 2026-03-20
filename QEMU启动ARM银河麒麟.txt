@@ -10,22 +10,20 @@ http://releases.linaro.org/components/kernel/uefi-linaro/16.02/release/qemu64/QE
 qemu-system-aarch64.exe -m 16G -cpu cortex-a76 -smp 8 -M virt -bios D:/VirtualMachines/ISO/ARM/QEMU_EFI.fd -rtc base=localtime -display gtk,show-cursor=on -device virtio-gpu-pci -device nec-usb-xhci -device usb-tablet -device usb-kbd -drive if=none,file=D:/VirtualMachines/Systems/Kylin10SP1-General-2303-ARM64/kylin_arm64.qcow2,id=hd0,format=qcow2 -device virtio-blk-device,drive=hd0 -drive if=none,file=D:/VirtualMachines/ISO/ARM/Kylin-Desktop-V10-SP1-General-Release-2303-ARM64.iso,id=cdrom,media=cdrom -device virtio-scsi-device -device scsi-cd,drive=cdrom -netdev user,id=net0,hostfwd=tcp::2222-:22 -device virtio-net-pci,netdev=net0 --accel tcg,thread=multi
 
 启动系统
-qemu-system-aarch64.exe -m 16G -cpu cortex-a76 -smp 8 -M virt -bios D:/VirtualMachines/ISO/ARM/QEMU_EFI.fd -rtc base=localtime -display gtk,show-cursor=on -device virtio-gpu-pci -device nec-usb-xhci -device usb-tablet -device usb-kbd -drive if=none,file=D:/VirtualMachines/Systems/Kylin10SP1-General-2303-ARM64/kylin_arm64.qcow2,id=hd0,format=qcow2 -device virtio-blk-device,drive=hd0 -netdev user,id=net0,hostfwd=tcp::2222-:22 -device virtio-net-pci,netdev=net0 --accel tcg,thread=multi
+qemu-system-aarch64.exe -m 16G -cpu cortex-a76 -smp 8 -M virt -bios D:/VirtualMachines/ISO/ARM/QEMU_EFI.fd -rtc base=localtime -display gtk,show-cursor=on -device virtio-gpu-pci -device nec-usb-xhci -device usb-tablet -device usb-kbd -drive if=none,file=D:/VirtualMachines/Systems/Kylin10SP1-General-2303-ARM64/kylin_arm64.qcow2,id=hd0,format=qcow2 -device virtio-blk-device,drive=hd0 -netdev user,id=net0,hostfwd=tcp::2222-:22 -device virtio-net-pci,netdev=net0 --accel tcg,thread=multi -drive file=D:/VirtualMachines/Systems/Kylin10SP1-General-2303-ARM64/share.vhd,format=vpc,if=virtio
 
 挂载镜像
 -cdrom D:\Work\Projects\Learn\Cpp\osgeo\osgeo.iso
 
 Windows挂载虚拟磁盘传输文件
-Windows端操作
-创建一个虚拟磁盘    qemu-img create -f raw share.img 100M
-格式化这个虚拟盘    qemu-img convert -f raw -O vpc share.img share.vhd
-双击 share.vhd Windows系统会自动挂载，格式化它为 FAT32
-启动 QEMU 时带上这个共享盘
-     -drive file=share.img,if=virtio,format=raw  # 共享盘
+Windows使用磁盘管理创建vhd虚拟磁盘,并挂载
 
-虚拟机端操作
-新建挂载目录    mkdir -p /mnt/share
-直接挂载        mount -t vfat /dev/vdb /mnt/share
+启动参数增加
+-drive file=D:/VirtualMachines/Systems/Kylin10SP1-General-2303-ARM64/share.vhd,format=vpc,if=virtio
+
+虚拟机中挂载
+mkdir -p /mnt/share
+mount /dev/vdb /mnt/share
 
 快照管理
     创建：-c

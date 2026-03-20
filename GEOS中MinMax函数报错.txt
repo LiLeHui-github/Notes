@@ -1,0 +1,2 @@
+添加编译宏 NOMINMAX
+target_compile_definitions(${PROJECT_NAME} PRIVATE NOMINMAX)
