@@ -3,40 +3,15 @@ sudo apt-get update
 下载后缓存路径
 /var/cache/apt/archives
 
+下载包
+sudo apt-get install --download-only --reinstall <pakcage_name>
+
 清理缓存
 sudo apt cleanG
 
-说明
-    查找包的所有依赖
-     apt-cache depends <package_name>
-
-    查找包的具体版本
-    apt-cache policy <package_name>
-
-    查询已安装的包
-    dpkg -l | grep <package_name>
-
-    下载包
-    apt-get download <package_name>
-
-    下载依赖包
-    #!/bin/bash
-    # 获取所有直接和间接依赖
-    apt-cache depends --recurse --no-recommends --no-suggests <package_name> | \
-    grep "^[a-zA-Z]" | sort -u | \
-    while read pkg; do
-        # 检查是否已安装（用明确命令）
-        if dpkg -l | grep -q "^ii  $pkg "; then
-            echo "跳过已安装: $pkg"
-        else
-            echo "正在下载: $pkg"
-            apt-get download "$pkg"
-        fi
-    done
-
-    安装包
-    sudo dpkg -i *.deb
-    sudo apt install ./<package_name>
+安装包
+sudo dpkg -i *.deb
+sudo apt install ./<package_name>
 
 或者在干净系统调用安装然后复制缓存
     sudo apt clean
